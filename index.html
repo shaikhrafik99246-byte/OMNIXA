@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMNIXA-X | The Infrastructure of Tomorrow</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#080d1b;color:#fff;line-height:1.6}
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 7%;border-bottom:1px solid #202b40;position:sticky;top:0;background:#080d1bf2;z-index:5}
+.logo{font-size:25px;font-weight:800;letter-spacing:2px;color:#65b8ff}
+nav{display:flex;gap:24px;align-items:center}
+nav a{color:#c8d5e8;text-decoration:none;font-size:14px}
+nav a:hover{color:#65b8ff}
+button{border:0;border-radius:8px;padding:12px 20px;font-weight:bold;cursor:pointer}
+.primary{background:#2789ee;color:white}
+.secondary{background:#17243a;color:#dceaff;border:1px solid #304663}
+.hero{padding:100px 8% 85px;text-align:center;background:radial-gradient(ellipse at top,#163a65 0%,#080d1b 65%)}
+.eyebrow{color:#75c5ff;letter-spacing:3px;font-size:12px;font-weight:bold}
+h1{font-size:clamp(40px,7vw,72px);line-height:1.1;margin:20px auto;max-width:900px}
+h1 span{color:#64b7ff}
+.hero p{max-width:680px;margin:20px auto;color:#b7c5d9;font-size:18px}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+section{padding:70px 8%}
+.section-title{text-align:center;font-size:32px;margin-bottom:12px}
+.section-sub{text-align:center;color:#9eafc7;margin:0 auto 38px;max-width:650px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:#101b2d;border:1px solid #263954;padding:25px;border-radius:14px}
+.card .symbol{font-size:28px;margin-bottom:12px}
+.card h3{margin-bottom:8px}
+.card p{color:#a9b8cc;font-size:14px}
+.about{background:#0d1728}
+.auth-wrap{max-width:520px;margin:auto;background:#101b2d;border:1px solid #2b405d;border-radius:16px;padding:28px}
+.tabs{display:flex;gap:10px;margin-bottom:22px}
+.tabs button{flex:1}
+.tabs button.active{background:#2789ee;color:white}
+input{width:100%;padding:14px;margin:8px 0 14px;background:#080f1e;border:1px solid #30435e;border-radius:8px;color:white;font-size:15px}
+label{font-size:13px;color:#bdcce0}
+.auth-wrap .primary{width:100%;margin-top:8px}
+#message{margin-top:14px;font-size:14px;color:#83c6ff;overflow-wrap:anywhere}
+footer{text-align:center;padding:30px;color:#8294ad;border-top:1px solid #202b40;font-size:13px}
+.menu-btn{display:none}
+@media(max-width:650px){
+ header{padding:16px 5%;flex-wrap:wrap}
+ nav{gap:12px;flex-wrap:wrap;margin-top:12px}
+ nav a{font-size:12px}
+ .hero{padding:75px 6%}
+ section{padding:55px 6%}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">OMNIXA-X</div>
+ <nav>
+  <a href="#home">Home</a>
+  <a href="#services">Services</a>
+  <a href="#about">About</a>
+  <a href="#account">Account</a>
+ </nav>
+</header>
+
+<main>
+<section class="hero" id="home">
+ <div class="eyebrow">A ROCKSTAR TECHNOLOGIES PROJECT</div>
+ <h1>The Infrastructure<br>of <span>Tomorrow.</span></h1>
+ <p>Explore a new generation of cloud computing and AI infrastructure. Build, develop and imagine what comes next.</p>
+ <div class="actions">
+  <button class="primary" onclick="document.getElementById('account').scrollIntoView({behavior:'smooth'})">Get Started</button>
+  <button class="secondary" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore Services</button>
+ </div>
+</section>
+
+<section id="services">
+ <h2 class="section-title">Powerful Technology. One Platform.</h2>
+ <p class="section-sub">Explore the planned OMNIXA-X platform services.</p>
+ <div class="grid">
+  <div class="card"><div class="symbol">☁️</div><h3>Cloud Storage</h3><p>A planned platform for storing and managing digital files.</p></div>
+  <div class="card"><div class="symbol">✦</div><h3>AI Services</h3><p>A planned foundation for intelligent AI-powered applications.</p></div>
+  <div class="card"><div class="symbol">🌐</div><h3>App Hosting</h3><p>Tools for deploying and managing websites and applications.</p></div>
+  <div class="card"><div class="symbol">⚙️</div><h3>Computing</h3><p>Explore computing resources and infrastructure management.</p></div>
+  <div class="card"><div class="symbol">⌘</div><h3>Developer Tools</h3><p>Tools designed to support developers and digital projects.</p></div>
+  <div class="card"><div class="symbol">▥</div><h3>Data Analytics</h3><p>A planned workspace for understanding and exploring data.</p></div>
+ </div>
+</section>
+
+<section class="about" id="about">
+ <h2 class="section-title">Building What Comes Next</h2>
+ <p class="section-sub">OMNIXA-X is an ambitious cloud computing and AI infrastructure project by Rockstar Technologies. Our goal is to develop technology that helps people create, build and innovate.</p>
+</section>
+
+<section id="account">
+ <h2 class="section-title">Your OMNIXA-X Account</h2>
+ <p class="section-sub">Create an account or sign in to access the control center.</p>
+ <div class="auth-wrap">
+  <div class="tabs">
+   <button id="loginTab" class="primary active" onclick="setMode('login')">Login</button>
+   <button id="signupTab" class="secondary" onclick="setMode('signup')">Sign Up</button>
+  </div>
+  <form id="authForm">
+   <label for="email">Email address</label>
+   <input id="email" type="email" placeholder="Enter your email" autocomplete="email" required>
+   <label for="password">Password</label>
+   <input id="password" type="password" placeholder="Enter your password" minlength="6" autocomplete="current-password" required>
+   <button class="primary" id="submitBtn" type="submit">Login</button>
+  </form>
+  <div id="message" role="status"></div>
+ </div>
+</section>
+</main>
+
+<footer>OMNIXA-X · A Rockstar Technologies Project · The Infrastructure of Tomorrow.</footer>
+
+<script>
+const SUPABASE_URL = "PASTE_YOUR_PROJECT_URL_HERE";
+const SUPABASE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+
+const configured =
+ !SUPABASE_URL.includes("PASTE_") &&
+ !SUPABASE_KEY.includes("PASTE_");
+
+let supabaseClient = null;
+let mode = "login";
+
+if (configured && window.supabase) {
+ supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
+function setMode(nextMode) {
+ mode = nextMode;
+ document.getElementById("loginTab").className =
+  mode === "login" ? "primary active" : "secondary";
+ document.getElementById("signupTab").className =
+  mode === "signup" ? "primary active" : "secondary";
+ document.getElementById("submitBtn").textContent =
+  mode === "login" ? "Login" : "Create Account";
+ document.getElementById("password").autocomplete =
+  mode === "login" ? "current-password" : "new-password";
+ document.getElementById("message").textContent = "";
+}
+
+document.getElementById("authForm").addEventListener("submit", async function(event) {
+ event.preventDefault();
+
+ const message = document.getElementById("message");
+ const button = document.getElementById("submitBtn");
+ const email = document.getElementById("email").value.trim();
+ const password = document.getElementById("password").value;
+
+ if (!supabaseClient) {
+  message.textContent = "Supabase setup is incomplete. Add your Project URL and Publishable key in this file.";
+  return;
+ }
+
+ button.disabled = true;
+ button.textContent = "Please wait...";
+ message.textContent = "";
+
+ try {
+  if (mode === "signup") {
+   const {data, error} = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: {
+     emailRedirectTo: window.location.origin + window.location.pathname
+    }
+   });
+   if (error) throw error;
+
+   if (data.session) {
+    window.location.href = "dashboard.html";
+   } else {
+    message.textContent = "Account created. Check your email for the confirmation link, then sign in.";
+   }
+  } else {
+   const {error} = await supabaseClient.auth.signInWithPassword({email, password});
+   if (error) throw error;
+   window.location.href = "dashboard.html";
+  }
+ } catch(error) {
+  message.textContent = error.message || "Something went wrong. Please try again.";
+ } finally {
+  button.disabled = false;
+  button.textContent = mode === "login" ? "Login" : "Create Account";
+ }
+});
+
+async function checkExistingSession() {
+ if (!supabaseClient) return;
+ const {data} = await supabaseClient.auth.getSession();
+ if (data.session) {
+  // Keep the homepage visible; users can open the dashboard after signing in.
+ }
+}
+checkExistingSession();
+</script>
+</body>
+</html>
