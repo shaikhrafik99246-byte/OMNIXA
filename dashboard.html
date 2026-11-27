@@ -1,0 +1,813 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMNIXA-X | Cloud Platform</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+ font-family:Arial,sans-serif;
+ background:#080e1c;
+ color:white;
+ min-height:100vh;
+}
+
+button{font-family:inherit}
+
+#loading{
+ text-align:center;
+ padding:100px 20px;
+ color:#9aabc1;
+}
+
+#dashboard[hidden]{display:none!important}
+
+.app{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+
+.sidebar{
+ width:250px;
+ flex-shrink:0;
+ background:#0d182a;
+ border-right:1px solid #263750;
+ padding:24px 15px;
+ display:flex;
+ flex-direction:column;
+ transition:transform .25s;
+}
+
+.brand{
+ font-size:23px;
+ font-weight:800;
+ letter-spacing:2px;
+ color:#64baff;
+ padding:5px 12px 28px;
+}
+
+.brand small{
+ display:block;
+ font-size:10px;
+ color:#8196b2;
+ letter-spacing:1px;
+ margin-top:7px;
+ font-weight:normal;
+}
+
+.nav-label{
+ color:#71849e;
+ font-size:10px;
+ letter-spacing:1.5px;
+ padding:12px;
+}
+
+.nav-btn{
+ width:100%;
+ display:flex;
+ align-items:center;
+ gap:12px;
+ padding:12px;
+ margin-bottom:5px;
+ background:transparent;
+ color:#a8bad0;
+ border:1px solid transparent;
+ border-radius:8px;
+ text-align:left;
+ cursor:pointer;
+ font-size:13px;
+ transition:.2s;
+}
+
+.nav-btn:hover{
+ background:#172941;
+ color:white;
+}
+
+.nav-btn.active{
+ background:#16385b;
+ border-color:#28547d;
+ color:#76c5ff;
+}
+
+.nav-icon{
+ width:22px;
+ text-align:center;
+ font-size:17px;
+}
+
+.sidebar-bottom{
+ margin-top:auto;
+ border-top:1px solid #263750;
+ padding-top:15px;
+}
+
+.project-label{
+ font-size:10px;
+ color:#7890aa;
+ padding:12px;
+}
+
+/* MAIN AREA */
+
+.main-area{
+ flex:1;
+ min-width:0;
+}
+
+.topbar{
+ height:70px;
+ background:#101a2c;
+ border-bottom:1px solid #263750;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 30px;
+ gap:15px;
+}
+
+.top-left,.top-right{
+ display:flex;
+ align-items:center;
+ gap:15px;
+}
+
+.menu-btn{
+ display:none;
+ background:#1a2c45;
+ color:white;
+ border:1px solid #36506e;
+ padding:9px 12px;
+ border-radius:7px;
+ cursor:pointer;
+}
+
+.top-status{
+ color:#57dca0;
+ font-size:11px;
+}
+
+.user{
+ color:#9aabc1;
+ font-size:12px;
+ overflow-wrap:anywhere;
+}
+
+.logout{
+ padding:9px 14px;
+ background:#20344e;
+ color:white;
+ border:1px solid #36506e;
+ border-radius:6px;
+ cursor:pointer;
+}
+
+.logout:hover{background:#304c6e}
+
+.content{
+ padding:35px;
+ max-width:1250px;
+ margin:auto;
+}
+
+.page{display:none}
+.page.active{display:block}
+
+.welcome{margin-bottom:28px}
+
+.welcome h1{
+ font-size:29px;
+ margin-bottom:10px;
+}
+
+.welcome p{
+ color:#9aabc1;
+ font-size:14px;
+ line-height:1.6;
+}
+
+.notice{
+ background:#14243b;
+ border:1px solid #2a4566;
+ color:#b7cce6;
+ padding:15px;
+ border-radius:8px;
+ margin-bottom:25px;
+ font-size:13px;
+ line-height:1.7;
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+ gap:16px;
+ margin-bottom:30px;
+}
+
+.stat,.service,.panel{
+ background:#111e32;
+ border:1px solid #263b58;
+ border-radius:12px;
+ padding:21px;
+}
+
+.stat p{
+ color:#a5b5ca;
+ font-size:13px;
+}
+
+.stat h2{
+ margin-top:13px;
+ color:#68bdff;
+ font-size:23px;
+}
+
+.heading{
+ margin:30px 0 17px;
+ font-size:20px;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+ gap:16px;
+}
+
+.service .icon{
+ font-size:28px;
+}
+
+.service h3{
+ margin:15px 0 9px;
+ font-size:17px;
+}
+
+.service p{
+ font-size:13px;
+ color:#9aabc1;
+ line-height:1.7;
+}
+
+.service button,.primary-btn{
+ margin-top:17px;
+ padding:10px 15px;
+ background:#147ed6;
+ color:white;
+ border:0;
+ border-radius:6px;
+ cursor:pointer;
+}
+
+.service button:hover,.primary-btn:hover{
+ background:#2999f2;
+}
+
+.panel{
+ margin-top:20px;
+}
+
+.panel h3{margin-bottom:12px}
+
+.panel p{
+ color:#9aabc1;
+ font-size:13px;
+ line-height:1.8;
+}
+
+.empty-state{
+ padding:35px 20px;
+ text-align:center;
+ color:#9aabc1;
+ background:#111e32;
+ border:1px solid #263b58;
+ border-radius:12px;
+ margin-top:18px;
+}
+
+.empty-state .icon{
+ font-size:30px;
+ margin-bottom:12px;
+}
+
+footer{
+ text-align:center;
+ padding:25px;
+ color:#8495ac;
+ font-size:12px;
+}
+
+/* MOBILE */
+
+.overlay{
+ display:none;
+}
+
+@media(max-width:760px){
+
+ .sidebar{
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  z-index:20;
+  transform:translateX(-100%);
+  width:265px;
+ }
+
+ .sidebar.open{
+  transform:translateX(0);
+ }
+
+ .overlay.show{
+  display:block;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:19;
+ }
+
+ .menu-btn{display:block}
+
+ .topbar{
+  padding:0 15px;
+  height:65px;
+ }
+
+ .content{padding:25px 17px}
+
+ .welcome h1{font-size:24px}
+
+ .user{font-size:10px}
+
+ .top-status{display:none}
+}
+
+@media(max-width:390px){
+ .user{max-width:110px}
+ .logout{padding:8px 10px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="loading">Checking your OMNIXA-X account...</div>
+
+<div id="dashboard" hidden>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar" id="sidebar">
+
+<div class="brand">
+ OMNIXA-X
+ <small>THE INFRASTRUCTURE OF TOMORROW</small>
+</div>
+
+<div class="nav-label">PLATFORM</div>
+
+<button class="nav-btn active" data-page="overview">
+ <span class="nav-icon">⌂</span> Overview
+</button>
+
+<button class="nav-btn" data-page="workspace">
+ <span class="nav-icon">▣</span> Workspace
+</button>
+
+<button class="nav-btn" data-page="ai">
+ <span class="nav-icon">✧</span> AI Studio
+</button>
+
+<button class="nav-btn" data-page="cloud">
+ <span class="nav-icon">☁</span> Cloud Services
+</button>
+
+<div class="nav-label">MANAGEMENT</div>
+
+<button class="nav-btn" data-page="projects">
+ <span class="nav-icon">◫</span> My Projects
+</button>
+
+<button class="nav-btn" data-page="activity">
+ <span class="nav-icon">◷</span> Activity Center
+</button>
+
+<div class="sidebar-bottom">
+
+<div class="nav-label">PREFERENCES</div>
+
+<button class="nav-btn" data-page="settings">
+ <span class="nav-icon">⚙</span> Settings
+</button>
+
+<div class="project-label">A Rockstar Technologies Project</div>
+
+</div>
+</aside>
+
+<!-- MAIN -->
+
+<div class="main-area">
+
+<header class="topbar">
+
+<div class="top-left">
+ <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+ <span class="top-status">● Platform Prototype</span>
+</div>
+
+<div class="top-right">
+ <span class="user" id="userEmail">Loading account...</span>
+ <button class="logout" id="logoutBtn">Logout</button>
+</div>
+
+</header>
+
+<main class="content">
+
+<!-- OVERVIEW -->
+
+<section class="page active" id="page-overview">
+
+<div class="welcome">
+ <h1>Cloud Control Center</h1>
+ <p>Welcome to your OMNIXA-X platform workspace.</p>
+</div>
+
+<div class="notice">
+ OMNIXA-X is currently in its prototype development stage.
+ The service sections below represent planned capabilities,
+ not active cloud infrastructure.
+</div>
+
+<div class="stats">
+ <div class="stat">
+  <p>Cloud Storage</p>
+  <h2>Planned</h2>
+ </div>
+ <div class="stat">
+  <p>AI Services</p>
+  <h2>Planned</h2>
+ </div>
+ <div class="stat">
+  <p>App Hosting</p>
+  <h2>Planned</h2>
+ </div>
+ <div class="stat">
+  <p>Computing</p>
+  <h2>Planned</h2>
+ </div>
+</div>
+
+<h2 class="heading">Platform Services</h2>
+
+<div class="grid">
+
+<div class="service">
+ <div class="icon">☁️</div>
+ <h3>Cloud Storage</h3>
+ <p>File storage and cloud data management.</p>
+ <button onclick="showInfo('Cloud Storage')">Explore</button>
+</div>
+
+<div class="service">
+ <div class="icon">🧠</div>
+ <h3>AI Services</h3>
+ <p>AI infrastructure and intelligent services.</p>
+ <button onclick="showInfo('AI Services')">Explore</button>
+</div>
+
+<div class="service">
+ <div class="icon">🌐</div>
+ <h3>App Hosting</h3>
+ <p>Website and application hosting solutions.</p>
+ <button onclick="showInfo('App Hosting')">Explore</button>
+</div>
+
+<div class="service">
+ <div class="icon">⚡</div>
+ <h3>Computing</h3>
+ <p>Computing resources and infrastructure.</p>
+ <button onclick="showInfo('Computing')">Explore</button>
+</div>
+
+<div class="service">
+ <div class="icon">💻</div>
+ <h3>Developer Tools</h3>
+ <p>Tools and resources for developers.</p>
+ <button onclick="showInfo('Developer Tools')">Explore</button>
+</div>
+
+<div class="service">
+ <div class="icon">📊</div>
+ <h3>Analytics</h3>
+ <p>Data monitoring and analytics capabilities.</p>
+ <button onclick="showInfo('Analytics')">Explore</button>
+</div>
+
+</div>
+</section>
+
+<!-- WORKSPACE -->
+
+<section class="page" id="page-workspace">
+ <div class="welcome">
+  <h1>Workspace</h1>
+  <p>Your central area for managing work on OMNIXA-X.</p>
+ </div>
+ <div class="empty-state">
+  <div class="icon">▣</div>
+  <h3>Workspace is being developed</h3>
+  <p>Your personal workspace features will be introduced here.</p>
+ </div>
+</section>
+
+<!-- AI STUDIO -->
+
+<section class="page" id="page-ai">
+ <div class="welcome">
+  <h1>AI Studio</h1>
+  <p>Explore the future of AI services and infrastructure.</p>
+ </div>
+ <div class="empty-state">
+  <div class="icon">✧</div>
+  <h3>AI Studio is planned</h3>
+  <p>AI models, APIs and intelligent tools are part of the roadmap.</p>
+ </div>
+</section>
+
+<!-- CLOUD SERVICES -->
+
+<section class="page" id="page-cloud">
+ <div class="welcome">
+  <h1>Cloud Services</h1>
+  <p>Explore the cloud infrastructure capabilities of OMNIXA-X.</p>
+ </div>
+ <div class="grid">
+  <div class="service">
+   <div class="icon">☁️</div>
+   <h3>Cloud Storage</h3>
+   <p>Cloud file and data storage.</p>
+   <button onclick="showInfo('Cloud Storage')">Explore</button>
+  </div>
+  <div class="service">
+   <div class="icon">⚡</div>
+   <h3>Computing</h3>
+   <p>Computing infrastructure.</p>
+   <button onclick="showInfo('Computing')">Explore</button>
+  </div>
+  <div class="service">
+   <div class="icon">🌐</div>
+   <h3>App Hosting</h3>
+   <p>Application deployment and hosting.</p>
+   <button onclick="showInfo('App Hosting')">Explore</button>
+  </div>
+ </div>
+</section>
+
+<!-- PROJECTS -->
+
+<section class="page" id="page-projects">
+ <div class="welcome">
+  <h1>My Projects</h1>
+  <p>Organize and manage your platform projects.</p>
+ </div>
+ <div class="empty-state">
+  <div class="icon">◫</div>
+  <h3>Project Management</h3>
+  <p>Project creation and management features are planned.</p>
+ </div>
+</section>
+
+<!-- ACTIVITY -->
+
+<section class="page" id="page-activity">
+ <div class="welcome">
+  <h1>Activity Center</h1>
+  <p>Keep track of your platform activities.</p>
+ </div>
+ <div class="empty-state">
+  <div class="icon">◷</div>
+  <h3>Activity Center is planned</h3>
+  <p>Recent actions and activity history will appear here.</p>
+ </div>
+</section>
+
+<!-- SETTINGS -->
+
+<section class="page" id="page-settings">
+ <div class="welcome">
+  <h1>Settings</h1>
+  <p>Manage your OMNIXA-X account and preferences.</p>
+ </div>
+ <div class="panel">
+  <h3>Account Information</h3>
+  <p>Signed-in account:</p>
+  <p id="settingsEmail">Loading...</p>
+ </div>
+ <div class="panel">
+  <h3>Platform</h3>
+  <p>OMNIXA-X Platform Prototype</p>
+  <p>The Infrastructure of Tomorrow.</p>
+ </div>
+</section>
+
+</main>
+
+<footer>
+ OMNIXA-X | Cloud Computing & AI Infrastructure
+</footer>
+
+</div>
+</div>
+</div>
+
+<script>
+
+// SUPABASE CONFIGURATION
+
+const SUPABASE_URL =
+ "https://jfzncidfatliflsehdfa.supabase.co";
+
+// Apni existing Supabase publishable key yahan paste karo.
+const SUPABASE_KEY =
+ "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+
+let supabaseClient = null;
+
+const loading = document.getElementById("loading");
+const dashboard = document.getElementById("dashboard");
+
+if(
+ !SUPABASE_KEY.includes("PASTE_") &&
+ window.supabase
+){
+ supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+ );
+}
+
+// AUTHENTICATION
+
+async function startDashboard(){
+
+ if(!supabaseClient){
+  loading.textContent =
+   "Supabase configuration is incomplete. Check your Publishable key.";
+  return;
+ }
+
+ try{
+
+  const {data,error} =
+   await supabaseClient.auth.getSession();
+
+  if(error) throw error;
+
+  if(!data.session){
+   window.location.replace("index.html#account");
+   return;
+  }
+
+  const email =
+   data.session.user.email || "Signed in";
+
+  document.getElementById("userEmail").textContent = email;
+  document.getElementById("settingsEmail").textContent = email;
+
+  loading.hidden = true;
+  dashboard.hidden = false;
+
+ }catch(error){
+
+  loading.textContent =
+   "Unable to verify your account: " + error.message;
+
+ }
+
+}
+
+// NAVIGATION
+
+const navButtons = document.querySelectorAll(".nav-btn[data-page]");
+const pages = document.querySelectorAll(".page");
+
+function openPage(pageName){
+
+ pages.forEach(page=>{
+  page.classList.toggle(
+   "active",
+   page.id === "page-" + pageName
+  );
+ });
+
+ navButtons.forEach(button=>{
+  button.classList.toggle(
+   "active",
+   button.dataset.page === pageName
+  );
+ });
+
+ closeSidebar();
+
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+navButtons.forEach(button=>{
+ button.addEventListener("click",()=>{
+  openPage(button.dataset.page);
+ });
+});
+
+// MOBILE SIDEBAR
+
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+const menuBtn = document.getElementById("menuBtn");
+
+function openSidebar(){
+ sidebar.classList.add("open");
+ overlay.classList.add("show");
+}
+
+function closeSidebar(){
+ sidebar.classList.remove("open");
+ overlay.classList.remove("show");
+}
+
+menuBtn.addEventListener("click",()=>{
+ if(sidebar.classList.contains("open")){
+  closeSidebar();
+ }else{
+  openSidebar();
+ }
+});
+
+overlay.addEventListener("click",closeSidebar);
+
+// LOGOUT
+
+document.getElementById("logoutBtn").addEventListener(
+ "click",
+ async function(){
+
+  this.disabled = true;
+  this.textContent = "Logging out...";
+
+  const {error} =
+   await supabaseClient.auth.signOut();
+
+  if(error){
+   alert(error.message);
+   this.disabled = false;
+   this.textContent = "Logout";
+   return;
+  }
+
+  window.location.replace("index.html");
+
+ }
+);
+
+// AUTH STATE
+
+if(supabaseClient){
+
+ supabaseClient.auth.onAuthStateChange(
+  (event,session)=>{
+
+   if(event === "SIGNED_OUT"){
+    window.location.replace("index.html#account");
+   }
+
+  }
+ );
+
+}
+
+function showInfo(service){
+
+ alert(
+  service +
+  " is part of the OMNIXA-X development roadmap. " +
+  "This feature is not active yet."
+ );
+
+}
+
+startDashboard();
+
+</script>
+
+</body>
+</html>
